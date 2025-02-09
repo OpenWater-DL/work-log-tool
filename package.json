@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "motion": "^12.4.1"
+  },
+  "name": "25_0208-motion",
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {
+    "vite": "^6.1.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

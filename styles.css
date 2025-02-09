@@ -1,0 +1,125 @@
+body {
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+}
+
+#app {
+    display: flex;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 80vh;
+}
+
+.input-section, .preview-section {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.input-section h2, .preview-section h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.5em;
+}
+
+#worklog {
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+#stats {
+    margin-top: 20px;
+}
+
+.total-time {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.project-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.type-container {
+    margin-bottom: 15px;
+}
+
+.type-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.project-item {
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.project-content {
+    flex: 1;
+}
+
+.type-buttons {
+    display: none;
+    gap: 8px;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.type-button {
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.type-button:hover {
+    background: #f0f0f0;
+}
+
+
+ul.example {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex: 0;
+    margin: 0;
+    padding: 0;
+}
+
+ul.example li {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: block;
+    background-color: #1ea2b3;
+    opacity: 0;
+    flex: 0 0 50px;
+}

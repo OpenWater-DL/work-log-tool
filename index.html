@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motion One Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <div class="input-section">
+            <h2>工作日志输入</h2>
+            <textarea id="worklog" placeholder="请按格式输入：
+>MM-DD
+- 项目名称 ~小时数
+- 另一个项目 ~小时数"></textarea>
+        </div>
+        <div class="preview-section">
+            <h2>本周统计</h2>
+            <div id="stats">
+                <div class="total-time">本周总计：<span>0</span>小时</div>
+                <div class="project-stats"></div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js" type="module"></script>
+</body>
+</html>
