@@ -2,7 +2,7 @@
   "dependencies": {
     "motion": "^12.4.1"
   },
-  "name": "25_0208-motion",
+  "name": "WorkLogTool",
   "version": "1.0.0",
   "main": "app.js",
   "devDependencies": {
