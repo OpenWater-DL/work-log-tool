@@ -18,7 +18,7 @@ body {
     background: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .input-section h2, .preview-section h2 {
@@ -36,6 +36,7 @@ body {
     resize: vertical;
     font-family: inherit;
     line-height: 1.5;
+    box-sizing: border-box;
 }
 
 #stats {
@@ -74,6 +75,12 @@ body {
     justify-content: space-between;
     align-items: center;
     position: relative;
+    .project-item.sub-task {
+        margin-left: 20px;
+        background: #fcfcfc;
+        border-left: 2px solid #eee;
+        color: #2196F3;
+    }
 }
 
 .project-content {
