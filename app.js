@@ -131,6 +131,7 @@ function calculateStats(entries) {
         
         // 将父项目数据添加到对应类型的projects中
         typeStats.projects[project] = {
+            projectObj: parentProjectData.get(project) ,
             mainHours: pjData.totalHours || 0,
             subTaskHours: pjData.totalHours - (pjData.hours || 0),
             subTasks: pjData.subTasks
@@ -198,8 +199,11 @@ function updateStats(stats) {
         typeContainer.appendChild(typeHeader);
 
         // 遍历该类型下的所有项目
-        Object.entries(typeStats.projects).forEach(([project, hours]) => {
-            // console.log(project)
+        Object.entries(typeStats.projects).forEach( i => {
+            console.log(i)
+            const thisPj = i[1].projectObj;
+            const project = i[0];
+            const hours = i[1];
             // console.log(hours)
             // 创建项目容器
             /*<div class="project-item">
@@ -211,9 +215,10 @@ function updateStats(stats) {
             projectItem.className = 'project-item';
             const projectContent = document.createElement('div');
             projectContent.className = 'project-content';
-
-            // 判断是否为父任务（带有子任务的项目）
-            if (typeof hours === 'object' && hours.subTasks) {
+            console.log('检测父任务')
+// 判断是否为父任务（带有子任务的项目）
+            if (thisPj.subTasks.length > 0) {
+           
                 // 显示父任务信息，包括项目名、主任务时长和子任务总计时长
                 projectContent.textContent = `- ${project} (${Number.isInteger(hours.mainHours) ? hours.mainHours.toString() : hours.mainHours.toFixed(1)}h, 子任务总计: ${Number.isInteger(hours.subTaskHours) ? hours.subTaskHours.toString() : hours.subTaskHours.toFixed(1)}h)`;
                 projectItem.appendChild(projectContent);
@@ -233,7 +238,7 @@ function updateStats(stats) {
                 typeContainer.appendChild(projectItem);
 
                 // 遍历并显示该父任务下的所有子任务
-                hours.subTasks.forEach(subTask => {
+                thisPj.subTasks.forEach(subTask => {
                     // 创建子任务容器
                     const subTaskItem = document.createElement('div');
                     subTaskItem.className = 'project-item sub-task';
@@ -247,7 +252,7 @@ function updateStats(stats) {
                 });
             } else {
                 // 独立任务显示
-                projectContent.textContent = `- ${project} (${Number.isInteger(hours) ? hours.toString() : hours.toFixed(1)}h)`;
+                projectContent.textContent = `- ${project} (${Number.isInteger(hours.mainHours) ? hours.mainHours.toString() : hours.mainHours.toFixed(1)}h)`;
                 projectItem.appendChild(projectContent);
 
                 // 添加类型选择按钮
