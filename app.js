@@ -105,15 +105,29 @@ function calculateStats(entries) {
     // 创建一个映射来存储父项目的子任务时间和子任务列表
     const parentProjectData = new Map();
 
+    // 首先收集所有父任务，并累加同名父任务的时间
+    const parentProjectTimes = new Map(); // 用于临时存储父任务的累计时间
+    const parentProjectTypes = new Map(); // 用于存储父任务的类型（使用最后一个出现的类型）
+
     for (const entry of entries) {
-        // 把所有不是子项目的任务都视为父项目   
         if (!entry.parentProject) {
-            parentProjectData.set(entry.project, {
-                totalHours: entry.hours,
-                subTasks: [],
-                type: entry.type
-            });
+            // 累加同名父任务的时间
+            const currentTotal = parentProjectTimes.get(entry.project) || 0;
+            parentProjectTimes.set(entry.project, currentTotal + (entry.hours || 0));
+            // 更新类型（使用最后一个出现的类型）
+            if (entry.type) {
+                parentProjectTypes.set(entry.project, entry.type);
+            }
         }
+    }
+
+    // 然后为每个父项目创建数据结构
+    for (const [project, totalHours] of parentProjectTimes) {
+        parentProjectData.set(project, {
+            totalHours: totalHours,
+            subTasks: [],
+            type: parentProjectTypes.get(project) || null
+        });
     }
 
     // 把子项目放进父项目中
@@ -136,20 +150,22 @@ function calculateStats(entries) {
         // 计算子任务总时长（只计算有时长的子任务）
         const subTasksTotal = pjData.subTasks.reduce((sum, task) => sum + (task.hours || 0), 0);
 
-        // 将该任务总时长加入类型总计
-        typeStats.total += pjData.hours || 0;  // 父任务自身的时长
-        typeStats.total += subTasksTotal;      // 子任务的总时长
+        // 计算父任务总时长（使用父任务自身的时间）
+        const mainTaskTotal = pjData.totalHours - subTasksTotal;
+
+        // 将父任务时长加入类型总计
+        typeStats.total += mainTaskTotal;
 
         // 将父项目数据添加到对应类型的projects中
         typeStats.projects[project] = {
             projectObj: parentProjectData.get(project),
-            mainHours: pjData.hours || 0,
+            mainHours: mainTaskTotal,
             subTaskHours: subTasksTotal,
             subTasks: pjData.subTasks
         };
 
-        // 将该任务总时长加入总计
-        stats.total += (pjData.hours || 0) + subTasksTotal;
+        // 将父任务时长加入总计
+        stats.total += mainTaskTotal;
     }
     console.log('stats')
     console.log(stats)
@@ -252,8 +268,12 @@ function updateStats(stats) {
                     if (mainTime) {
                         displayText += mainTime;
                     }
+                    if(mainTime && subTime){
+                        displayText += ", "
+                    }
+
                     if (subTime) {
-                        displayText += mainTime ? `, Sub: ${subTime}` : `Sub: ${subTime}`;
+                        displayText += `Sub: ${subTime}`;
                     }
                     displayText += ')';
                 }
