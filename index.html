@@ -1,28 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Motion One Demo</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
+
 <body>
     <div id="app">
-        <div class="input-section">
-            <h2>工作日志</h2>
-            <textarea id="worklog" placeholder="请按格式输入：
->MM-DD
-- 项目名称 ~小时数
-- 另一个项目 ~小时数"></textarea>
-        </div>
-        <div class="preview-section">
-            <h2>本周统计</h2>
-            <div id="stats">
-                <div class="total-time"><span>0</span>小时</div>
-                <div class="project-stats"></div>
+
+        <div class="area area-l">
+            <div class="input-section">
+                <div class="section-header">
+                    <div class="section-des">日报</div>
+                    <div class="section-num">
+                        <span class="num">0</span>
+                        <span class="unit">D</span>
+                    </div>
+                </div>
+                <textarea id="worklog" placeholder="请按格式输入：
+    >MM-DD
+    - 独立任务 1h
+    - 父级任务  
+        * 子项目 0.3h">
+</textarea>
             </div>
         </div>
+
+        <div class="area area-r">
+            <div class="preview-section">
+
+                <div class="section-header">
+                    <div class="section-des">统计</div>
+                    <div class="section-num">
+                        <span class="num total-time">0</span>
+                        <span class="unit">H</span>
+                    </div>
+                </div>
+
+                <div id="stats">
+                    <!-- <div class="total-time"><span>0</span> <span class="total-time-h">小时</span></div> -->
+                    <!-- <div class="projects-container"> -->
+                    <div class="project-stats"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+
     </div>
     <script src="app.js" type="module"></script>
 </body>
+
 </html>

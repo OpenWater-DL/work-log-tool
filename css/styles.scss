@@ -1,0 +1,287 @@
+@use './colors' as *;
+
+
+body {
+
+    margin: 0;
+    padding: 0;
+    background: radial-gradient(circle, #fffcf8, #C7C8CC);
+    // 修改字体设置
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+span {
+    display: inline-block;
+    height: 1em;
+    /* 根据字体大小调整 */
+}
+
+
+
+#app {
+    margin: 0 auto;
+    display: flex;
+
+}
+
+
+.area {
+    width: 50vw;
+    height: 100vh;
+    // padding: 20px 0;
+
+    overflow-y: scroll;
+
+    // 隐藏滚动条
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+
+    .input-section,
+    .preview-section {
+        width: 352px;
+        background-color: #E4E1DC;
+        padding: 20px;
+        margin-top: 56px;
+        margin-bottom: 48px;
+        min-height: 540px;
+        box-sizing: border-box;
+
+        border-radius: 8px;
+
+
+        .section-header {
+
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-weight: 400;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+
+            // 字体定义
+            .section-des {
+                // 日报、统计
+                font-size: 1rem;
+                color: $text-color-dark-4;
+            }
+
+            .section-num {
+                display: flex;
+                align-items: end;
+                gap: 8px;
+                padding-bottom: 6px; //用于修正不对齐
+
+                font-family: 'Roboto', sans-serif;
+                font-size: 3rem;
+                font-weight: 300;
+
+                // height: 48px;
+                .unit {
+                    font-size: 1rem;
+                    font-weight: 400;
+                    color: $text-color-dark-2;
+
+                }
+            }
+
+        }
+
+
+    }
+
+
+    .input-section {
+        // 让其靠右
+        float: right;
+        margin-right: 32px;
+
+
+    }
+
+    .preview-section {
+        margin-left: 32px;
+
+    }
+
+
+
+}
+
+
+// 左边 worklog面板
+.area-l {
+    // width: 100%;
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+
+    .input-section {
+
+        background-color: #3C3C3C;
+        // border: 1px solid 505050;
+
+        color: #fff;
+
+        // 面板顶部 日报 4D
+        .section-header {
+            border-bottom: 2px solid rgba(255, 255, 255, 0.9);
+
+            // 字体颜色定义
+            .section-des {
+                color: $text-color-dark-3;
+            }
+
+            .section-num {
+                .unit {
+                    color: $text-color-dark-2;
+                }
+            }
+
+
+        }
+    }
+
+
+    #worklog {
+        // 样式
+        box-sizing: border-box;
+        width: 100%;
+        padding: 0;
+        background-color: transparent;
+
+        border: none;
+
+
+        // 修改字体设置
+        // textarea 默认不会继承父元素的字体
+        font-family: inherit;
+
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 1.8;
+        color: $text-color-dark-1;
+
+        // 根据内容文本撑高
+        min-height: 150px;
+        resize: none;
+        /* 禁止用户手动调整大小 */
+        overflow: hidden;
+
+        &:focus {
+            outline: none;
+        }
+
+    }
+
+
+}
+
+.area-r {
+    .preview-section {
+        border: rgba(255, 255, 255, 0.4) 2px solid;
+        box-shadow: 0 4px 40px rgba(0, 0, 0, 0.12);
+
+        background-color: #F2F2F2;
+
+        color: #333;
+
+        //面板顶部 统计 27h
+        .section-header {
+            border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+
+            // 字体颜色定义
+            .section-des {
+                color: $text-color-light-3;
+            }
+
+            .section-num {
+                font-weight: 400;
+
+                .unit {
+                    font-weight: 500;
+                    color: $text-color-light-2;
+                }
+            }
+
+        }
+
+        .project-stats {
+            position: relative;
+
+            // background-color: #333;
+            .type-container {
+                border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
+                padding-bottom: 1.2rem;
+                margin-bottom: 1.2rem;
+
+
+                .type-header {
+                    color: $text-color-light-3;
+                    font-size: 13px;
+                    margin-bottom: 0.5rem;
+                }
+
+                .project-item {
+                    font-weight: 500;
+                    font-size: 0.9rem;
+                    line-height: 1.8;
+
+                    &:hover {
+                        cursor: default;
+                        background-color: #00000007;
+                    }
+                }
+
+                .sub-task {
+                    font-size: 0.8rem;
+                    line-height: 1.5;
+
+                    padding-left: 2em;
+                    font-weight: 400;
+                    color: $text-color-light-3;
+
+                    &:hover {
+                        cursor: default;
+                        background-color: transparent;
+                    }
+                }
+            }
+
+            // 分类按钮
+            .type-buttons {
+                position: absolute;
+
+                right: 0;
+                display: flex;
+                gap: 2px;
+
+                .type-button {
+                    background-color: #3b3b3bea;
+                    backdrop-filter: blur(8px);
+                    -webkit-backdrop-filter: blur(8px);
+                    padding: 4px 8px;
+                    color: $text-color-dark-2;
+                    border-radius: 3px;
+                    border: none;
+
+                    &:hover {
+                        color: $text-color-dark-1;
+                        background-color: #292929;
+                        cursor: pointer;
+                    }
+                }
+
+            }
+
+
+        }
+
+    }
+
+
+
+}

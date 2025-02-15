@@ -1,0 +1,190 @@
+@charset "UTF-8";
+body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle, #fffcf8, #C7C8CC);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+span {
+  display: inline-block;
+  height: 1em;
+  /* 根据字体大小调整 */
+}
+
+#app {
+  margin: 0 auto;
+  display: flex;
+}
+
+.area {
+  width: 50vw;
+  height: 100vh;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+.area::-webkit-scrollbar {
+  display: none;
+}
+.area .input-section,
+.area .preview-section {
+  width: 352px;
+  background-color: #E4E1DC;
+  padding: 20px;
+  margin-top: 56px;
+  margin-bottom: 48px;
+  min-height: 540px;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+.area .input-section .section-header,
+.area .preview-section .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-weight: 400;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+}
+.area .input-section .section-header .section-des,
+.area .preview-section .section-header .section-des {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.2);
+}
+.area .input-section .section-header .section-num,
+.area .preview-section .section-header .section-num {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  padding-bottom: 6px;
+  font-family: "Roboto", sans-serif;
+  font-size: 3rem;
+  font-weight: 300;
+}
+.area .input-section .section-header .section-num .unit,
+.area .preview-section .section-header .section-num .unit {
+  font-size: 1rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+}
+.area .input-section {
+  float: right;
+  margin-right: 32px;
+}
+.area .preview-section {
+  margin-left: 32px;
+}
+
+.area-l {
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+.area-l .input-section {
+  background-color: #3C3C3C;
+  color: #fff;
+}
+.area-l .input-section .section-header {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.9);
+}
+.area-l .input-section .section-header .section-des {
+  color: rgba(255, 255, 255, 0.4);
+}
+.area-l .input-section .section-header .section-num .unit {
+  color: rgba(255, 255, 255, 0.7);
+}
+.area-l #worklog {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  font-family: inherit;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.8;
+  color: rgb(255, 255, 255);
+  min-height: 150px;
+  resize: none;
+  /* 禁止用户手动调整大小 */
+  overflow: hidden;
+}
+.area-l #worklog:focus {
+  outline: none;
+}
+
+.area-r .preview-section {
+  border: rgba(255, 255, 255, 0.4) 2px solid;
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.12);
+  background-color: #F2F2F2;
+  color: #333;
+}
+.area-r .preview-section .section-header {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+}
+.area-r .preview-section .section-header .section-des {
+  color: rgba(0, 0, 0, 0.4);
+}
+.area-r .preview-section .section-header .section-num {
+  font-weight: 400;
+}
+.area-r .preview-section .section-header .section-num .unit {
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.7);
+}
+.area-r .preview-section .project-stats {
+  position: relative;
+}
+.area-r .preview-section .project-stats .type-container {
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.area-r .preview-section .project-stats .type-container .type-header {
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 13px;
+  margin-bottom: 0.5rem;
+}
+.area-r .preview-section .project-stats .type-container .project-item {
+  font-weight: 500;
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+.area-r .preview-section .project-stats .type-container .project-item:hover {
+  cursor: default;
+  background-color: rgba(0, 0, 0, 0.0274509804);
+}
+.area-r .preview-section .project-stats .type-container .sub-task {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  padding-left: 2em;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.4);
+}
+.area-r .preview-section .project-stats .type-container .sub-task:hover {
+  cursor: default;
+  background-color: transparent;
+}
+.area-r .preview-section .project-stats .type-buttons {
+  position: absolute;
+  right: 0;
+  display: flex;
+  gap: 2px;
+}
+.area-r .preview-section .project-stats .type-buttons .type-button {
+  background-color: rgba(59, 59, 59, 0.9176470588);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 4px 8px;
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: 3px;
+  border: none;
+}
+.area-r .preview-section .project-stats .type-buttons .type-button:hover {
+  color: rgb(255, 255, 255);
+  background-color: #292929;
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=styles.css.map */

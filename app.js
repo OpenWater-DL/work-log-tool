@@ -1,7 +1,7 @@
 import { animate } from "motion";
 
 const worklogTextarea = document.getElementById('worklog');
-const totalTimeSpan = document.querySelector('.total-time span');
+const totalTimeSpan = document.querySelector('.total-time');
 const projectStats = document.querySelector('.project-stats');
 
 // 设置textarea的tab键行为
@@ -25,11 +25,13 @@ const TASK_TYPES = {
 };
 
 // 解析工作日志文本
+// 在 parseWorklog 函数中添加日期集合
 function parseWorklog(text, existingEntries = []) {
     const entries = [];
     const lines = text.trim().split('\n');
-    let currentEntry = {};
+    let currentEntry = { date: null };
     let currentParentProject = null;
+    const dates = new Set();  // 用于存储不重复的日期
 
     // 创建一个映射来存储现有条目的分类信息
     const existingTypeMap = new Map();
@@ -44,15 +46,15 @@ function parseWorklog(text, existingEntries = []) {
         const trimmedLine = line.trim();
 
         if (trimmedLine.startsWith('>')) {
-            if (Object.keys(currentEntry).length > 0) {
-                entries.push(currentEntry);
-                currentEntry = {};
-            }
+            // 更新当前条目的日期
             currentEntry.date = trimmedLine.substring(1).trim();
+            dates.add(currentEntry.date);  // 添加日期到集合
             currentParentProject = null;
         } else if (trimmedLine.startsWith('-') || trimmedLine.startsWith('*')) {
+            if (!currentEntry.date) continue; // 如果没有日期，跳过该行
+
             const timeMatch = trimmedLine.substring(1).match(/(.+?)(?:\s*(\d+(?:\.\d+)?h?)\s*)?$/);  // 修改正则表达式以使时间部分可选
-            if (timeMatch && currentEntry.date) {
+            if (timeMatch) {
                 const [, project, hours] = timeMatch;
                 const trimmedProject = project.trim();
                 // 检查是否存在相同项目的分类信息
@@ -81,6 +83,10 @@ function parseWorklog(text, existingEntries = []) {
         }
     }
 
+    // 更新日期显示
+    const daysCount = dates.size;
+    document.querySelector('.section-num .num').textContent = daysCount;
+
     return entries;
 }
 
@@ -92,8 +98,7 @@ function calculateStats(entries) {
             [TASK_TYPES.CORE]: { total: 0, projects: {} },
             [TASK_TYPES.OTHER]: { total: 0, projects: {} },
             [TASK_TYPES.COMMUNICATION]: { total: 0, projects: {} },
-            [TASK_TYPES.PROCESS]: { total: 0, projects: {} },
-            unclassified: { total: 0, projects: {} }
+            [TASK_TYPES.PROCESS]: { total: 0, projects: {} }
         }
     };
 
@@ -116,29 +121,35 @@ function calculateStats(entries) {
         if (entry.parentProject) {
             // 从父map中获得该父项目记录
             const thisParent = parentProjectData.get(entry.parentProject);
-            thisParent.totalHours += entry.hours;
+            if (entry.hours) {  // 只有当子任务有时长时才加入总计
+                thisParent.totalHours += entry.hours;
+            }
             thisParent.subTasks.push(entry);
         }
     }
 
     // 然后处理所有任务的时间统计
     for (const [project, pjData] of parentProjectData) {
-        const type = pjData.type || 'unclassified';
+        const type = pjData.type || TASK_TYPES.PROCESS;
         const typeStats = stats.types[type];
-        
+
+        // 计算子任务总时长（只计算有时长的子任务）
+        const subTasksTotal = pjData.subTasks.reduce((sum, task) => sum + (task.hours || 0), 0);
+
         // 将该任务总时长加入类型总计
-        typeStats.total += pjData.totalHours;
-        
+        typeStats.total += pjData.hours || 0;  // 父任务自身的时长
+        typeStats.total += subTasksTotal;      // 子任务的总时长
+
         // 将父项目数据添加到对应类型的projects中
         typeStats.projects[project] = {
-            projectObj: parentProjectData.get(project) ,
-            mainHours: pjData.totalHours || 0,
-            subTaskHours: pjData.totalHours - (pjData.hours || 0),
+            projectObj: parentProjectData.get(project),
+            mainHours: pjData.hours || 0,
+            subTaskHours: subTasksTotal,
             subTasks: pjData.subTasks
         };
-        
+
         // 将该任务总时长加入总计
-        stats.total += pjData.totalHours;
+        stats.total += (pjData.hours || 0) + subTasksTotal;
     }
     console.log('stats')
     console.log(stats)
@@ -152,7 +163,12 @@ function createTypeButtons(project, entries) {
     buttonsContainer.className = 'type-buttons';
     buttonsContainer.style.display = 'none';
 
-    Object.values(TASK_TYPES).forEach(type => {
+    // 过滤掉当前任务所属的分类类型，只显示其他可选类型的按钮
+    Object.values(TASK_TYPES).filter(type => {
+        // 查找当前项目的类型，如果未分类则视为"未完成"
+        const currentType = entries.find(entry => entry.project === project)?.type || TASK_TYPES.PROCESS;
+        return type !== currentType;
+    }).forEach(type => {
         const button = document.createElement('button');
         button.textContent = type;
         button.className = 'type-button';
@@ -195,11 +211,11 @@ function updateStats(stats) {
         //<div class="type-header">核心交付</div>
         const typeHeader = document.createElement('div');
         typeHeader.className = 'type-header';
-        typeHeader.textContent = `${type === 'unclassified' ? '未分类' : type} - ${Number.isInteger(typeStats.total) ? typeStats.total.toString() : typeStats.total.toFixed(1)} h`;
+        typeHeader.textContent = `[${type === 'unclassified' ? '未分类' : type} - ${Number.isInteger(typeStats.total) ? typeStats.total.toString() : typeStats.total.toFixed(1)} ]`;
         typeContainer.appendChild(typeHeader);
 
         // 遍历该类型下的所有项目
-        Object.entries(typeStats.projects).forEach( i => {
+        Object.entries(typeStats.projects).forEach(i => {
             console.log(i)
             const thisPj = i[1].projectObj;
             const project = i[0];
@@ -215,12 +231,34 @@ function updateStats(stats) {
             projectItem.className = 'project-item';
             const projectContent = document.createElement('div');
             projectContent.className = 'project-content';
-            console.log('检测父任务')
-// 判断是否为父任务（带有子任务的项目）
+
+            // 判断是否为父任务（带有子任务的项目）
             if (thisPj.subTasks.length > 0) {
-           
-                // 显示父任务信息，包括项目名、主任务时长和子任务总计时长
-                projectContent.textContent = `- ${project} (${Number.isInteger(hours.mainHours) ? hours.mainHours.toString() : hours.mainHours.toFixed(1)}h, 子任务总计: ${Number.isInteger(hours.subTaskHours) ? hours.subTaskHours.toString() : hours.subTaskHours.toFixed(1)}h)`;
+                // 格式化时间显示
+                const formatTime = (time) => {
+                    if (time === undefined || time === null || time === 0) return '';
+                    return Number.isInteger(time) ? time.toString() : time.toFixed(1);
+                };
+
+                // 构建显示文本
+                let displayText = `- ${project}`;
+                
+                // 添加主任务时间和子任务时间
+                const mainTime = formatTime(hours.mainHours);
+                const subTime = formatTime(hours.subTaskHours);
+                
+                if (mainTime || subTime) {
+                    displayText += ' (';
+                    if (mainTime) {
+                        displayText += mainTime;
+                    }
+                    if (subTime) {
+                        displayText += mainTime ? `, Sub: ${subTime}` : `Sub: ${subTime}`;
+                    }
+                    displayText += ')';
+                }
+
+                projectContent.textContent = displayText;
                 projectItem.appendChild(projectContent);
 
                 // 为父任务添加类型选择按钮
@@ -245,14 +283,27 @@ function updateStats(stats) {
                     const subTaskContent = document.createElement('div');
                     subTaskContent.className = 'project-content';
                     // 显示子任务信息，包括名称和时长
-                    subTaskContent.textContent = `    * ${subTask.project} (${Number.isInteger(subTask.hours) ? subTask.hours.toString() : subTask.hours.toFixed(1)}h)`;
-                    subTaskContent.style.color = '#2196F3';
+                    const timeText = subTask.hours ? ` (${Number.isInteger(subTask.hours) ? subTask.hours.toString() : subTask.hours.toFixed(1)})` : '';
+                    subTaskContent.textContent = `    * ${subTask.project}${timeText}`;
                     subTaskItem.appendChild(subTaskContent);
                     typeContainer.appendChild(subTaskItem);
                 });
             } else {
                 // 独立任务显示
-                projectContent.textContent = `- ${project} (${Number.isInteger(hours.mainHours) ? hours.mainHours.toString() : hours.mainHours.toFixed(1)}h)`;
+                console.log('独立任务数据:', hours); // 添加调试信息
+                const formatTime = (time) => {
+                    if (time === undefined || time === null || time === 0) return '';
+                    return Number.isInteger(time) ? time.toString() : time.toFixed(1);
+                };
+
+                // 使用正确的属性访问时间
+                const timeText = formatTime(thisPj.totalHours);  // 改用 thisPj.totalHours 而不是 hours.mainHours
+                let displayText = `- ${project}`;
+                if (timeText) {
+                    displayText += ` (${timeText})`;
+                }
+                
+                projectContent.textContent = displayText;
                 projectItem.appendChild(projectContent);
 
                 // 添加类型选择按钮
@@ -282,6 +333,19 @@ let currentEntries = [];
 worklogTextarea.addEventListener('input', (e) => {
     const text = e.target.value;
     currentEntries = parseWorklog(text, currentEntries);
+
+
+
     const stats = calculateStats(currentEntries);
     updateStats(stats);
+
+});
+
+
+const editor = document.querySelector('#worklog');
+editor.addEventListener('input', () => {
+  // 重置高度为 auto，以便重新计算
+  editor.style.height = 'auto';
+  // 设置高度为 scrollHeight（内容的高度）
+  editor.style.height = `${editor.scrollHeight}px`;
 });
