@@ -205,11 +205,39 @@ function createTypeButtons(project, entries) {
 
 // 更新统计显示
 function updateStats(stats) {
+    // 检查文本框是否为空或只包含空白字符
+    const worklogContent = worklogTextarea.value.trim();
+    if (!worklogContent) {
+        // 更新总时间为0
+        totalTimeSpan.textContent = '0';
+        return;
+    }
+
+    // 隐藏暂无输入的占位符
+    if(document.querySelector('.stats-placeholder') ){
+
+        document.querySelector('.stats-placeholder').style.display = 'none';
+    }
+
     // 更新总时间
     totalTimeSpan.textContent = Number.isInteger(stats.total) ? stats.total.toString() : stats.total.toFixed(1);
 
     // 更新项目统计
     projectStats.innerHTML = '';
+
+    // 检查是否有任何项目数据
+    const hasProjects = Object.values(stats.types).some(typeStats => {
+        const projectCount = Object.keys(typeStats.projects).length;
+        return projectCount > 0;
+    });
+
+    if (!hasProjects) {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'stats-placeholder';
+        placeholder.textContent = '暂无输入';
+        projectStats.appendChild(placeholder);
+        return;
+    }
 
     // 创建类型分组
     // 遍历所有任务类型（核心、其他、协作等）及其统计数据
@@ -227,7 +255,7 @@ function updateStats(stats) {
         //<div class="type-header">核心交付</div>
         const typeHeader = document.createElement('div');
         typeHeader.className = 'type-header';
-        typeHeader.textContent = `[${type === 'unclassified' ? '未分类' : type} - ${Number.isInteger(typeStats.total) ? typeStats.total.toString() : typeStats.total.toFixed(1)} ]`;
+        typeHeader.textContent = `[ ${type === 'unclassified' ? '未分类' : type} - ${Number.isInteger(typeStats.total) ? typeStats.total.toString() : typeStats.total.toFixed(1)} ]`;
         typeContainer.appendChild(typeHeader);
 
         // 遍历该类型下的所有项目
@@ -353,14 +381,17 @@ let currentEntries = [];
 worklogTextarea.addEventListener('input', (e) => {
     const text = e.target.value;
     currentEntries = parseWorklog(text, currentEntries);
-
-
-
     const stats = calculateStats(currentEntries);
     updateStats(stats);
-
 });
 
+// 页面加载完成后立即执行一次统计和显示
+document.addEventListener('DOMContentLoaded', () => {
+    const text = worklogTextarea.value;
+    currentEntries = parseWorklog(text, currentEntries);
+    const stats = calculateStats(currentEntries);
+    updateStats(stats);
+});
 
 const editor = document.querySelector('#worklog');
 editor.addEventListener('input', () => {
