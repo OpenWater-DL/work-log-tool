@@ -28,19 +28,14 @@ span {
 .area {
     width: 50vw;
     height: 100vh;
-    // padding: 20px 0;
-
-    overflow-y: scroll;
-
-    // 隐藏滚动条
+    position: relative;
+    overflow-y: auto;
+    // 隐藏默认滚动条但保持滚动功能
     &::-webkit-scrollbar {
         display: none;
     }
-
-    -ms-overflow-style: none;
-    /* IE and Edge */
-    scrollbar-width: none;
-    /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 
     .input-section,
     .preview-section {
@@ -48,12 +43,13 @@ span {
         background-color: #E4E1DC;
         padding: 20px;
         margin-top: 56px;
+        min-height: calc(100vh - 76px);
+        will-change: transform;
         margin-bottom: 48px;
         min-height: 540px;
         box-sizing: border-box;
 
         border-radius: 8px;
-
 
         .section-header {
 
@@ -169,7 +165,7 @@ span {
         min-height: 150px;
         resize: none;
         /* 禁止用户手动调整大小 */
-        overflow: hidden;
+        overflow: auto;
 
         &:focus {
             outline: none;

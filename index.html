@@ -55,6 +55,44 @@
 
     </div>
     <script src="app.js" type="module"></script>
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script> 
+
+<script>
+
+
+    // 为左右区域分别应用 Lenis 滚动
+    // 必须要指明容器，否则不生效
+    
+    const scrollL = new Lenis({
+        wrapper:  document.querySelector('.area-l'),
+        content: document.querySelector('.input-section'),
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical'
+    })
+
+    const scrollR = new Lenis({
+        wrapper:  document.querySelector('.area-r'),
+        content: document.querySelector('.preview-section'),
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical'
+    })
+    // Lenis 滚动更新函数
+    function raf(time) {
+        
+        scrollR.raf(time)
+        scrollL.raf(time)
+        requestAnimationFrame(raf)
+    }
+
+    // 启动滚动动画
+    requestAnimationFrame(raf)
+
+
+</script>
+
+
 </body>
 
 </html>

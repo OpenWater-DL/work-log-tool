@@ -214,7 +214,7 @@ function updateStats(stats) {
     }
 
     // 隐藏暂无输入的占位符
-    if(document.querySelector('.stats-placeholder') ){
+    if (document.querySelector('.stats-placeholder')) {
 
         document.querySelector('.stats-placeholder').style.display = 'none';
     }
@@ -286,17 +286,17 @@ function updateStats(stats) {
 
                 // 构建显示文本
                 let displayText = `- ${project}`;
-                
+
                 // 添加主任务时间和子任务时间
                 const mainTime = formatTime(hours.mainHours);
                 const subTime = formatTime(hours.subTaskHours);
-                
+
                 if (mainTime || subTime) {
                     displayText += ' (';
                     if (mainTime) {
                         displayText += mainTime;
                     }
-                    if(mainTime && subTime){
+                    if (mainTime && subTime) {
                         displayText += ", "
                     }
 
@@ -350,7 +350,7 @@ function updateStats(stats) {
                 if (timeText) {
                     displayText += ` (${timeText})`;
                 }
-                
+
                 projectContent.textContent = displayText;
                 projectItem.appendChild(projectContent);
 
@@ -395,8 +395,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const editor = document.querySelector('#worklog');
 editor.addEventListener('input', () => {
-  // 重置高度为 auto，以便重新计算
-  editor.style.height = 'auto';
-  // 设置高度为 scrollHeight（内容的高度）
-  editor.style.height = `${editor.scrollHeight}px`;
+    // 重置高度为 auto，以便重新计算
+    editor.style.height = 'auto';
+    // 设置高度为 scrollHeight（内容的高度）
+    editor.style.height = `${editor.scrollHeight}px`;
+
+    // 获取父容器
+    const areaL = document.querySelector('.area-l');
+    // 获取光标位置相对于视窗的位置
+    const cursorPosition = editor.getBoundingClientRect().bottom;
+    // 获取视窗高度
+    const viewportHeight = window.innerHeight;
+
+    // 如果光标位置超过视窗高度的80%，则滚动父容器
+    if (cursorPosition > viewportHeight * 0.8) {
+        const scrollAmount = cursorPosition - viewportHeight * 0.6; // 滚动到视窗60%的位置
+        areaL.scrollTop += scrollAmount;
+    }
+
+
 });

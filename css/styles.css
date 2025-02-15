@@ -20,11 +20,10 @@ span {
 .area {
   width: 50vw;
   height: 100vh;
-  overflow-y: scroll;
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
+  position: relative;
+  overflow-y: auto;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 .area::-webkit-scrollbar {
   display: none;
@@ -35,6 +34,8 @@ span {
   background-color: #E4E1DC;
   padding: 20px;
   margin-top: 56px;
+  min-height: calc(100vh - 76px);
+  will-change: transform;
   margin-bottom: 48px;
   min-height: 540px;
   box-sizing: border-box;
@@ -108,7 +109,7 @@ span {
   min-height: 150px;
   resize: none;
   /* 禁止用户手动调整大小 */
-  overflow: hidden;
+  overflow: auto;
 }
 .area-l #worklog:focus {
   outline: none;
