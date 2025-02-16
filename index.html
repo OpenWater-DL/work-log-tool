@@ -106,23 +106,47 @@
     let timeout;
 
     copyBtn.addEventListener('click', () => {
-        copyBtn.classList.add('clicked');
-        copyBtn.querySelector('.copy-text').textContent = 'Copied!';
+        // 获取预览内容并处理格式
+        const previewContent = document.querySelector('.project-stats').innerText
+            .split('\n')
+            .map(line => {
+                // 如果是子项目（以*开头），添加额外的空格
+                if (line.trim().startsWith('*')) {
+                    return '   ' + line;
+                }
+                // 如果是分类标题（以[开头），在前后添加空行
+                if (line.trim().startsWith('[')) {
+                    return '\n' + line ;
+                }
+                return line;
+            })
+            .join('\n')
+            // 处理可能出现的多余空行
+            .replace(/\n{3,}/g, '\n\n');
         
-        if (timeout) clearTimeout(timeout);
-        
-        timeout = setTimeout(() => {
-            copyBtn.classList.remove('clicked');
+        // 复制到剪贴板
+        navigator.clipboard.writeText(previewContent).then(() => {
+            // 复制成功后的动画效果
+            copyBtn.classList.add('clicked');
+            copyBtn.querySelector('.copy-text').textContent = 'Copied!';
             
-            // 监听过渡动画结束事件，保证先消失，再设置回“copy”
-            const copyText = copyBtn.querySelector('.copy-text');
-            const onTransitionEnd = () => {
-                copyText.textContent = 'Copy';
-                copyText.removeEventListener('transitionend', onTransitionEnd);
-            };
-            copyText.addEventListener('transitionend', onTransitionEnd);
+            if (timeout) clearTimeout(timeout);
             
-        }, 1500);
+            timeout = setTimeout(() => {
+                copyBtn.classList.remove('clicked');
+                
+                const copyText = copyBtn.querySelector('.copy-text');
+                const onTransitionEnd = () => {
+                    copyText.textContent = 'Copy';
+                    copyText.removeEventListener('transitionend', onTransitionEnd);
+                };
+                copyText.addEventListener('transitionend', onTransitionEnd);
+                
+            }, 1500);
+        }).catch(err => {
+            console.error('复制失败:', err);
+            copyBtn.querySelector('.copy-text').textContent = 'Failed!';
+        });
     });
 
 
