@@ -151,6 +151,7 @@ span {
   font-weight: 500;
   font-size: 0.9rem;
   line-height: 1.8;
+  position: relative;
 }
 .area-r .preview-section .project-stats .type-container .project-item:hover {
   cursor: default;
@@ -169,6 +170,7 @@ span {
 }
 .area-r .preview-section .project-stats .type-buttons {
   position: absolute;
+  top: 2px;
   right: 0;
   display: flex;
   gap: 2px;
@@ -177,10 +179,11 @@ span {
   background-color: rgba(59, 59, 59, 0.9176470588);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  padding: 4px 8px;
+  padding: 3px 8px;
   color: rgba(255, 255, 255, 0.7);
   border-radius: 3px;
   border: none;
+  font-size: 11px;
 }
 .area-r .preview-section .project-stats .type-buttons .type-button:hover {
   color: rgb(255, 255, 255);
@@ -191,6 +194,43 @@ span {
 .stats-placeholder {
   color: rgba(0, 0, 0, 0.2);
   font-size: 14px;
+}
+
+#copy-btn {
+  position: absolute;
+  left: 20px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+#copy-btn .circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.12);
+  transition: background-color 0.2s ease;
+}
+#copy-btn .copy-text {
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+#copy-btn:hover .circle {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+#copy-btn:hover .copy-text {
+  opacity: 1;
+  color: rgba(0, 0, 0, 0.4);
+}
+#copy-btn.clicked .circle {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+#copy-btn.clicked .copy-text {
+  opacity: 1;
+  color: rgba(0, 0, 0, 0.9);
 }
 
 /*# sourceMappingURL=styles.css.map */

@@ -225,7 +225,7 @@ span {
                     font-weight: 500;
                     font-size: 0.9rem;
                     line-height: 1.8;
-
+                    position: relative;
                     &:hover {
                         cursor: default;
                         background-color: #00000007;
@@ -250,7 +250,7 @@ span {
             // 分类按钮
             .type-buttons {
                 position: absolute;
-
+                top: 2px;
                 right: 0;
                 display: flex;
                 gap: 2px;
@@ -259,10 +259,12 @@ span {
                     background-color: #3b3b3bea;
                     backdrop-filter: blur(8px);
                     -webkit-backdrop-filter: blur(8px);
-                    padding: 4px 8px;
+                //    height: 20px;
+                    padding: 3px 8px;
                     color: $text-color-dark-2;
                     border-radius: 3px;
                     border: none;
+                    font-size: 11px;
 
                     &:hover {
                         color: $text-color-dark-1;
@@ -288,3 +290,53 @@ span {
     // padding: 32px 0;
     font-size: 14px;
 }
+
+
+
+#copy-btn {
+    position: absolute;
+    left: calc(20px);
+    bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    
+    .circle {
+        $size: 10px;
+        width: $size;
+        height: $size;
+        border-radius: 20px;
+        background-color: rgba(0, 0, 0, 0.12);
+        transition: background-color 0.2s ease;
+    }
+  
+    .copy-text {
+        font-size: 13px;
+        font-weight: 500;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    &:hover {
+        .circle {
+            cursor: pointer;
+            background-color: $text-color-light-3;
+        }
+        .copy-text {
+            opacity: 1;
+            color: $text-color-light-3;
+        }
+    }
+
+    &.clicked {
+        .circle {
+            background-color: $text-color-light-1;
+        }
+        .copy-text {
+            opacity: 1;
+            color: $text-color-light-1;
+        }
+    }
+}
+  
+  

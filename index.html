@@ -48,12 +48,23 @@
                     </div>
                 </div>
 
+
+                <div id="copy-btn">
+                    <div class="circle"></div>
+                    <div class="copy-text">Copy</div>
+                </div>
+
             </div>
+
+         
 
         </div>
 
 
     </div>
+
+
+
     <script src="app.js" type="module"></script>
     <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script> 
 
@@ -88,6 +99,32 @@
 
     // 启动滚动动画
     requestAnimationFrame(raf)
+
+
+     // 复制按钮交互
+     const copyBtn = document.getElementById('copy-btn');
+    let timeout;
+
+    copyBtn.addEventListener('click', () => {
+        copyBtn.classList.add('clicked');
+        copyBtn.querySelector('.copy-text').textContent = 'Copied!';
+        
+        if (timeout) clearTimeout(timeout);
+        
+        timeout = setTimeout(() => {
+            copyBtn.classList.remove('clicked');
+            
+            // 监听过渡动画结束事件，保证先消失，再设置回“copy”
+            const copyText = copyBtn.querySelector('.copy-text');
+            const onTransitionEnd = () => {
+                copyText.textContent = 'Copy';
+                copyText.removeEventListener('transitionend', onTransitionEnd);
+            };
+            copyText.addEventListener('transitionend', onTransitionEnd);
+            
+        }, 1500);
+    });
+
 
 
 </script>
