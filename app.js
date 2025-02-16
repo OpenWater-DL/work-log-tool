@@ -1,5 +1,3 @@
-import { animate } from "motion";
-
 const worklogTextarea = document.getElementById('worklog');
 const totalTimeSpan = document.querySelector('.total-time');
 const projectStats = document.querySelector('.project-stats');
