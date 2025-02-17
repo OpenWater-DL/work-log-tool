@@ -2,6 +2,8 @@
 上班每天写工作日报，每周汇总时都觉得麻烦，于是做了这个小工具帮助统计。  
 左面板输入日报，右面板自动汇总统计，悬停可按按钮分类
 
+[**跳转使用→**](https://openwater-dl.github.io/work-log-tool/)
+
 ![image](https://github.com/user-attachments/assets/17a818e9-ed0a-4f80-9186-272241860de7)
 
 # 使用格式
